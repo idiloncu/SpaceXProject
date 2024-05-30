@@ -9,7 +9,9 @@ ext {
 android {
     namespace 'com.example.spacexproject'
     compileSdk 34
-
+    buildFeatures{
+        viewBinding = true
+    }
     defaultConfig {
         applicationId "com.example.spacexproject"
         minSdk 24

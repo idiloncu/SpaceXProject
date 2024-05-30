@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SpaceXProject</string>
+    <string name="capsul_id">Capsul Id</string>
+    <string name="capsule_serial">Capsule Serial</string>
 </resources>
