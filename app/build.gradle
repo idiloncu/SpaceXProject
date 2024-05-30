@@ -12,6 +12,8 @@ android {
     buildFeatures{
         viewBinding = true
     }
+    compileSdk 34
+
     defaultConfig {
         applicationId "com.example.spacexproject"
         minSdk 24
