@@ -17,13 +17,7 @@ class RecyclerViewAdapter(private val spacexList: ArrayList<SpaceModel>,private 
             itemView.setOnClickListener{
                 listener.onItemClick(spaceModel)
             }
-
-
-
-
         }
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RowHolder {
