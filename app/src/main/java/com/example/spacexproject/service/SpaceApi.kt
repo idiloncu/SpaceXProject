@@ -1,6 +1,8 @@
 package com.example.spacexproject.service
 
 import com.example.spacexproject.model.SpaceModel
+import retrofit2.Call
+import retrofit2.http.GET
 
 interface SpaceApi {
 
@@ -9,5 +11,6 @@ interface SpaceApi {
     //Base URL https://api.spacexdata.com/v3
     //capsules'
 //open source api oldugu için key yoktur.O yuzden burada GET("") seklinde keyi yazmadım
-    fun getData() : retrofit2.Call<List<SpaceModel>>
+    @GET("capsules")
+    fun getData() : Call<List<SpaceModel>>
 }
