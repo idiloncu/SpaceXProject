@@ -3,6 +3,7 @@ package com.example.spacexproject.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.spacexproject.R
+import com.example.spacexproject.databinding.ActivityMainBinding
 import com.example.spacexproject.model.SpaceModel
 import com.example.spacexproject.service.SpaceApi
 import retrofit2.Call
@@ -11,11 +12,14 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     private val BASE_URL = "https://api.spacexdata.com/v3"
     private var spaceModels:ArrayList<SpaceModel>?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding= ActivityMainBinding.inflate(layoutInflater)
+        val view=binding.root
+        setContentView(view)
     }
         //https://api.spacexdata.com/v4/capsules
     private fun loadData(){
