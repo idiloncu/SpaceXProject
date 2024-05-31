@@ -1,25 +1,30 @@
 package com.example.spacexproject.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Space
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.spacexproject.R
 import com.example.spacexproject.adapter.RecyclerViewAdapter
 import com.example.spacexproject.databinding.ActivityMainBinding
 import com.example.spacexproject.model.SpaceModel
 import com.example.spacexproject.service.SpaceApi
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), RecyclerViewAdapter.Listener {
-    private lateinit var binding: ActivityMainBinding
-    private val BASE_URL = "https://api.spacexdata.com/v3"
-    private var spaceModels:ArrayList<SpaceModel>?=null
-    private lateinit var recyclerViewAdapter:RecyclerViewAdapter
+    lateinit var binding: ActivityMainBinding
+    val BASE_URL = "https://api.spacexdata.com/v3/"
+    var spaceModels:ArrayList<SpaceModel>?=null
+    lateinit var recyclerViewAdapter:RecyclerViewAdapter
+    @Inject
+    lateinit var capsule_id:SpaceModel
+    @Inject
+    lateinit var capsule_serial:SpaceModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
@@ -33,7 +38,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.Listener {
         loadData()
 
     }
-    //https://api.spacexdata.com/v4/capsules
     private fun loadData(){
         val retrofit=Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -68,6 +72,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.Listener {
     }
 
     override fun onItemClick(spaceModel: SpaceModel) {
-        println("Clicked: ${spaceModel.capsule_id}")
+            Toast.makeText(this,"Clicked:${spaceModel.capsule_id}",Toast.LENGTH_LONG).show()
     }
 }

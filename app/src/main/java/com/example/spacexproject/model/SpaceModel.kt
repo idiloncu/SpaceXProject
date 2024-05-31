@@ -1,6 +1,9 @@
 package com.example.spacexproject.model
 
-data class SpaceModel (
-    val capsule_serial : String,
-    val capsule_id:String
-)
+import javax.inject.Inject
+
+data class SpaceModel @Inject constructor (
+    var capsule_serial : String,
+    var capsule_id : String)
+
+
