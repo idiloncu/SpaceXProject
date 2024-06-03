@@ -1,78 +1,96 @@
 package com.example.spacexproject.view
 
+import SpaceApiService
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spacexproject.R
 import com.example.spacexproject.adapter.RecyclerViewAdapter
 import com.example.spacexproject.databinding.ActivityMainBinding
 import com.example.spacexproject.model.SpaceModel
-import com.example.spacexproject.service.SpaceApi
+import com.example.spacexproject.service.SpacexServiceBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Inject
+
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), RecyclerViewAdapter.Listener {
-    lateinit var binding: ActivityMainBinding
+class MainActivity : AppCompatActivity() {
     val BASE_URL = "https://api.spacexdata.com/v3/"
+    val retrofit= Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    private val viewModel by viewModels <SpacexViewModel>()
+
+    lateinit var binding: ActivityMainBinding
     var spaceModels:ArrayList<SpaceModel>?=null
     lateinit var recyclerViewAdapter:RecyclerViewAdapter
-    @Inject
-    lateinit var capsule_id:SpaceModel
-    @Inject
-    lateinit var capsule_serial:SpaceModel
+
+    //Api ile retrofiti birbirine baglamak için bir service olusturdum
+    val service=retrofit.create(SpaceApiService::class.java)
+    val call =service.getData()
+    //requesti async sekilde yollar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityMainBinding.inflate(layoutInflater)
-        val view=binding.root
-        setContentView(view)
-        binding= ActivityMainBinding.inflate(layoutInflater)
-
-        binding.recyclerView.layoutManager=LinearLayoutManager(this)
-        recyclerViewAdapter = RecyclerViewAdapter(arrayListOf(),this)
-        binding.recyclerView.adapter = recyclerViewAdapter
+        setContentView(R.layout.activity_main)
 
         loadData()
+    }
+    fun goToDescription(view:View){
+        val fragmentManager=supportFragmentManager
+        val fragmentTraction=fragmentManager.beginTransaction()
+        val firstFragment=RocketDetailActivity()
+        // fragmentTraction.replace()
 
     }
-    private fun loadData(){
-        val retrofit=Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
 
-        //Api ile retrofiti birbirine baglamak için bir service olusturdum
-        val service=retrofit.create(SpaceApi::class.java)
-        val call =service.getData()
-        //requesti async sekilde yollar
-        call.enqueue(object :Callback<List<SpaceModel>> {
-            override fun onFailure(call: Call<List<SpaceModel>>, t: Throwable) {
-                t.printStackTrace()
-            }
-            override fun onResponse(
-                call: Call<List<SpaceModel>>,
-                response: Response<List<SpaceModel>>
-            ) {
-                if(response.isSuccessful){
-                    response.body()?.let {
-                        //eger response.body()? null gelmedıyse bu blogu yapar
-                        spaceModels=ArrayList(it)
-                        recyclerViewAdapter.updateSpaceList(spaceModels!!)
-                        for(xmodel : SpaceModel in spaceModels!!){
-                            println(xmodel.capsule_id)
-                            println(xmodel.capsule_serial)
+    private fun loadData() {
+
+        val destinationService=SpacexServiceBuilder.buildService(SpaceApiService::class.java)
+        val requestCall=destinationService.getData()
+
+        requestCall.enqueue(object : Callback<List<SpaceModel>>{
+            override fun onResponse(call: Call<List<SpaceModel>>, response: Response<List<SpaceModel>>) {
+                val rocketList = response.body()
+                Log.d("Response","onResponse: ${response.body()}")
+                if (response.isSuccessful){
+                    if (rocketList != null) {
+                        Log.d("Response", "RocketList size : ${rocketList.size}")
+                        if (response.isSuccessful){
+                            Log.d("Response", "RocketList size : ${rocketList.size}")
+                            recyclerViewAdapter.apply {
+
+                               // layoutManager = LinearLayoutManager(this@MainActivity)
+                                //adapter = RocketAdapter(response.body()!!)
+                            }
+                            //rocket_recycler.adapter?.notifyDataSetChanged()
+                        }
+                        else{
+                            Toast.makeText(this@MainActivity, "Something went wrong :( ${response.message()}", Toast.LENGTH_SHORT).show()
+                            Log.d("Response", "Failure: ${response.body()}")
                         }
                     }
-                }
-            }
-        })
-    }
 
-    override fun onItemClick(spaceModel: SpaceModel) {
-            Toast.makeText(this,"Clicked:${spaceModel.capsule_id}",Toast.LENGTH_LONG).show()
+                }
+
+            }
+
+            override fun onFailure(call: Call<List<SpaceModel>>, t: Throwable) {
+                Log.d(TAG, "onFailure ${t.message}")
+                Toast.makeText(this@MainActivity, "Something went wrong :( $t", Toast.LENGTH_SHORT).show()
+            }
+
+             })
+
     }
 }
+
+
+

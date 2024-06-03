@@ -1,4 +1,4 @@
-package com.example.spacexproject.di
+package com.example.spacexproject
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
