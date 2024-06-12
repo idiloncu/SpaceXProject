@@ -1,3 +1,5 @@
+package com.example.spacexproject.service
+
 import com.example.spacexproject.model.SpaceModel
 import retrofit2.Call
 import retrofit2.http.GET
@@ -10,7 +12,4 @@ interface SpaceApiService {
     @GET("/capsules")
     fun getData(): Call<List<SpaceModel>>
 
-    companion object {
-        const val BASE_URL = "https://api.spacexdata.com/v3/"
-    }
 }

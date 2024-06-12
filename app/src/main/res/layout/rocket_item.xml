@@ -35,7 +35,6 @@
             android:id="@+id/clickForMore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="goToDescription"
             android:text="@string/click_for_more" />
     </FrameLayout>
 

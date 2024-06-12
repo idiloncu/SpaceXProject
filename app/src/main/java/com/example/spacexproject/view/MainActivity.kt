@@ -1,6 +1,6 @@
 package com.example.spacexproject.view
 
-import SpaceApiService
+import com.example.spacexproject.service.SpaceApiService
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,7 +11,6 @@ import com.example.spacexproject.R
 import com.example.spacexproject.adapter.RecyclerViewAdapter
 import com.example.spacexproject.databinding.ActivityMainBinding
 import com.example.spacexproject.model.SpaceModel
-import com.example.spacexproject.service.SpacexServiceBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,40 +21,18 @@ import retrofit2.converter.gson.GsonConverterFactory
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     val BASE_URL = "https://api.spacexdata.com/v3/"
-    val retrofit= Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val viewModel by viewModels <SpacexViewModel>()
 
     lateinit var binding: ActivityMainBinding
-    var spaceModels:ArrayList<SpaceModel>?=null
-    lateinit var recyclerViewAdapter:RecyclerViewAdapter
-
-    //Api ile retrofiti birbirine baglamak için bir service olusturdum
-    val service=retrofit.create(SpaceApiService::class.java)
-    val call =service.getData()
-    //requesti async sekilde yollar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        loadData()
+     //   loadData()
     }
-    fun goToDescription(view:View){
-        val fragmentManager=supportFragmentManager
-        val fragmentTraction=fragmentManager.beginTransaction()
-        val firstFragment=RocketDetailActivity()
-        // fragmentTraction.replace()
-
-    }
-
+/*
     private fun loadData() {
-
-        val destinationService=SpacexServiceBuilder.buildService(SpaceApiService::class.java)
-        val requestCall=destinationService.getData()
-
         requestCall.enqueue(object : Callback<List<SpaceModel>>{
             override fun onResponse(call: Call<List<SpaceModel>>, response: Response<List<SpaceModel>>) {
                 val rocketList = response.body()
@@ -80,8 +57,8 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
-            }
-
+            }*/
+/*
             override fun onFailure(call: Call<List<SpaceModel>>, t: Throwable) {
                 Log.d(TAG, "onFailure ${t.message}")
                 Toast.makeText(this@MainActivity, "Something went wrong :( $t", Toast.LENGTH_SHORT).show()
@@ -89,7 +66,7 @@ class MainActivity : AppCompatActivity() {
 
              })
 
-    }
+    }*/
 }
 
 

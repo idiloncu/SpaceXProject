@@ -2,18 +2,14 @@ package com.example.spacexproject.view
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spacexproject.service.SpaceXRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import javax.inject.Inject
 
-private val <T> Call<T>.isSuccessful: Boolean
-    get() {
-        TODO("Not yet implemented")
-    }
-
 @HiltViewModel
-class  SpacexViewModel @Inject constructor() :ViewModel() {
+class  SpacexViewModel @Inject constructor(private val repository:SpaceXRepositoryImpl) :ViewModel() {
     init {
         fetchRockets()
     }
